@@ -23,6 +23,6 @@ FROM eclipse-temurin:21-jdk-jammy
 # EXPOSE instruction informs Docker that the container listens on the specified network ports
 # EXPOSE instruction doesn't actually publish the port.
 EXPOSE 8080
-COPY --from=build /home/gradle/src/consumer/build/libs/consumer-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /home/gradle/src/producer/build/libs/producer-0.0.1-SNAPSHOT.jar app.jar
 
 ENTRYPOINT ["java","-jar","/app.jar"]
