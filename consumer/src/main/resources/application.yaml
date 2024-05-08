@@ -1,0 +1,35 @@
+server:
+  port: ${APP_SERVICE_PORT:8081}
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  application:
+    name: ${APP_SERVICE_NAME:kafka-consumer}
+
+  kafka:
+    bootstrap-servers: ${CLOUD_KAFKA_BROKER_URL}
+    properties:
+      security:
+        protocol: SASL_SSL
+      sasl:
+        mechanism: SCRAM-SHA-256
+        jaas:
+          config: org.apache.kafka.common.security.scram.ScramLoginModule required
+            username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
+
+    consumer:
+      auto-offset-reset: latest
+      group-id: ${CLOUD_KAFKA_USERNAME}-consumers
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.malex
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
+cloud:
+  kafka:
+    topic: ${CLOUD_KAFKA_USERNAME}-default
