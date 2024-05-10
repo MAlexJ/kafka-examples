@@ -28,6 +28,18 @@ public class KafkaService {
   public void send() {
     var message = new Message(counter.getAndIncrement(), UUID.randomUUID().toString());
     log.info("Send message - {}", message);
-    kafkaTemplate.send(topic, message.toString());
+    kafkaTemplate
+        .send(topic, message.toString())
+        .thenAccept(
+            result -> {
+              var metadata = result.getRecordMetadata();
+              var offset = metadata.offset();
+              var partition = metadata.partition();
+              log.info(
+                  "Message was sent, topic - {}, partition - {}, offset - {}",
+                  metadata.topic(),
+                  partition,
+                  offset);
+            });
   }
 }
