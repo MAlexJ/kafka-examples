@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaConsumer {
 
-
-    @KafkaListener(topics = "#{'${kafka.info.topic}'.split(',')}",
-            containerFactory = "kafkaListenerContainerFactory"
-    )
-    public void processPayment(Message message) {
-        log.info("Message processed: {}", message );
-    }
-
+  @KafkaListener(
+      topics = "#{'${kafka.topic}'.split(',')}",
+      containerFactory = "kafkaListenerContainerFactory")
+  public void processPayment(Message message) {
+    log.info("Message processed: {}", message);
+  }
 }

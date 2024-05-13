@@ -20,11 +20,17 @@ spring:
             username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
 
     producer:
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         enable:
           idempotence: false
+        spring:
+          json:
+            add:
+              type:
+                headers: false
 
 kafka:
   topic:
-    out: ${CLOUD_KAFKA_USERNAME}-default
+    out: ${CLOUD_KAFKA_USERNAME}-json-producer

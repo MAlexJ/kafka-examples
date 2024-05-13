@@ -40,6 +40,7 @@ public class KafkaConsumerConfig {
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getKafkaBootstrapServersUrl());
     props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getKafkaConsumerGroupId());
     props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     /*
      * Configuration SASL_SSL connection: <a

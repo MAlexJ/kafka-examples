@@ -33,7 +33,7 @@ kafka:
   bootstrap:
     servers:
       url: ${CLOUD_KAFKA_BROKER_URL}
-  topic: ${CLOUD_KAFKA_USERNAME}-default
+  topic: ${CLOUD_KAFKA_USERNAME}-json-producer
   groupId: ${CLOUD_KAFKA_USERNAME}-consumer-error-handler
   security:
     sasl:
