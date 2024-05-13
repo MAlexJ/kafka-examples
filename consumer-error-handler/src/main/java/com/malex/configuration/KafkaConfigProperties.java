@@ -8,15 +8,16 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 @Configuration
-public class AppPropertiesConfig {
+public class KafkaConfigProperties {
+
   @Value("${kafka.bootstrap.servers.url}")
-  private String kafkaBootstrapServersUrl;
+  private String bootstrapServersUrl;
 
   @Value("${kafka.groupId}")
-  private String kafkaConsumerGroupId;
+  private String consumerGroupId;
 
   @Value("${kafka.topic}")
-  private String kafkaTopicAccessory;
+  private String topic;
 
   @Value("${kafka.security.sasl.protocol}")
   private String securitySaslProtocol;

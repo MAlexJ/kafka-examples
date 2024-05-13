@@ -1,9 +1,8 @@
 package com.malex.configuration;
 
-import com.malex.handler.KafkaErrorHandler;
+import com.malex.handler.KafkaCommonErrorHandler;
 import com.malex.model.Message;
 import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -25,7 +24,20 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
-  private final AppPropertiesConfig properties;
+  private final KafkaConfigProperties properties;
+
+  /**
+   * Kafka consumer factory setup - wrapper for concurrency
+   *
+   * @return wrapped factory
+   */
+  @Bean("kafkaListenerContainerFactory")
+  public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
+    var factory = new ConcurrentKafkaListenerContainerFactory<String, Message>();
+    factory.setConsumerFactory(consumerFactory());
+    factory.setCommonErrorHandler(new KafkaCommonErrorHandler());
+    return factory;
+  }
 
   /**
    * Kafka consumer factory setup - standard factory.
@@ -36,9 +48,9 @@ public class KafkaConsumerConfig {
    */
   @Bean
   public ConsumerFactory<String, Message> consumerFactory() {
-    Map<String, Object> props = new HashMap<>();
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getKafkaBootstrapServersUrl());
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getKafkaConsumerGroupId());
+    var props = new HashMap<String, Object>();
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServersUrl());
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getConsumerGroupId());
     props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
@@ -57,24 +69,11 @@ public class KafkaConsumerConfig {
     // spring.deserializer.key.delegate.class
     props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, JsonDeserializer.class);
 
-    ErrorHandlingDeserializer<Message> errorHandlingDeserializer =
-        new ErrorHandlingDeserializer<>(new JsonDeserializer<>(Message.class));
-
     return new DefaultKafkaConsumerFactory<>(
-        props, new StringDeserializer(), errorHandlingDeserializer);
+        props, new StringDeserializer(), createMessageErrorHandlingDeserializer());
   }
 
-  /**
-   * Kafka consumer factory setup - wrapper for concurrency.
-   *
-   * @return wrapped factory.
-   */
-  @Bean("kafkaListenerContainerFactory")
-  public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
-    ConcurrentKafkaListenerContainerFactory<String, Message> factory =
-        new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(consumerFactory());
-    factory.setCommonErrorHandler(new KafkaErrorHandler());
-    return factory;
+  private ErrorHandlingDeserializer<Message> createMessageErrorHandlingDeserializer() {
+    return new ErrorHandlingDeserializer<>(new JsonDeserializer<>(Message.class));
   }
 }
