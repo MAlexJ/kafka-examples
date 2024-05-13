@@ -39,3 +39,23 @@ CLOUD_KAFKA_USERNAME={Default user}
 CLOUD_KAFKA_PASSWORD={Password}
 CLOUD_KAFKA_BROKER_URL=test-speedcar-01.srvs.cloudkafka.com:9094
 ```
+
+### Github action
+
+issue:  ./gradlew: Permission denied
+link: https://stackoverflow.com/questions/17668265/gradlew-permission-denied
+
+You need to update the execution permission for gradlew
+
+1. add action workflow
+
+2. Locally pull changes
+
+3. run Git command:
+
+```
+git update-index --chmod=+x gradlew
+git add .
+git commit -m "Changing permission of gradlew"
+git push
+```
