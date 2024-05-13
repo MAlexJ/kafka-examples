@@ -2,7 +2,7 @@ package com.malex;
 
 import org.junit.jupiter.api.Test;
 
-class ConsumerErrorHandlerApplicationTests {
+class JsonProducerApplicationTests {
 
   @Test
   void contextLoads() {}

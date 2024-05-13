@@ -24,7 +24,7 @@ public class KafkaService {
   private final AtomicInteger counter = new AtomicInteger();
 
   @Transactional
-  @Scheduled(cron = "*/30 * * * * *")
+  @Scheduled(cron = "*/15 * * * * *")
   public void send() {
     var message = new Message(counter.getAndIncrement(), UUID.randomUUID().toString());
     log.info("Send message - {}", message);
