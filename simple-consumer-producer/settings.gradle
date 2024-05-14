@@ -1,0 +1,3 @@
+rootProject.name = 'simple-consumer-producer'
+include 'producer',
+        'consumer'
