@@ -39,3 +39,14 @@ CLOUD_KAFKA_USERNAME={Default user}
 CLOUD_KAFKA_PASSWORD={Password}
 CLOUD_KAFKA_BROKER_URL=test.com:9094
 ```
+
+### Gradle Versions Plugin
+
+Displays a report of the project dependencies that are up-to-date, exceed the latest version found, have upgrades, or
+failed to be resolved, info: https://github.com/ben-manes/gradle-versions-plugin
+
+command:
+
+```
+gradle dependencyUpdates
+```

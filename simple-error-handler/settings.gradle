@@ -1,0 +1,3 @@
+rootProject.name = 'simple-error-handler'
+include 'json-producer',
+        'consumer-error-handler'

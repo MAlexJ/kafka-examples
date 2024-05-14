@@ -2,5 +2,6 @@ rootProject.name = 'kafka-examples'
 
 include 'consumer',
         'producer',
-        'consumer-error-handler',
-        'json-producer'
+        'simple-error-handler',
+        'simple-error-handler:consumer-error-handler',
+        'simple-error-handler:json-producer'
