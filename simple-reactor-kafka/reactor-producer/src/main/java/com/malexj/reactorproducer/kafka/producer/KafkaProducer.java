@@ -1,6 +1,7 @@
 package com.malexj.reactorproducer.kafka.producer;
 
 import com.malexj.reactorproducer.model.Message;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +21,21 @@ public class KafkaProducer {
   private final ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducer;
 
   public Mono<SenderResult<Void>> send(Message message) {
-    log.info("send to topic={}, {}={},", topic, Message.class.getSimpleName(), message);
     return reactiveKafkaProducer
-        .send(topic, message)
+        .send(topic, UUID.randomUUID().toString(), message)
         .doOnSuccess(
-            senderResult ->
-                log.info("sent {} offset : {}", message, senderResult.recordMetadata().offset()));
+            senderResult -> {
+              Exception exception = senderResult.exception();
+              if (exception != null) {
+                log.warn("Exception occurred while sending message", exception);
+              }
+              var recordMetadata = senderResult.recordMetadata();
+              log.info(
+                  "sent {}, topic {}, partition {},  offset : {}",
+                  message,
+                  recordMetadata.topic(),
+                  recordMetadata.partition(),
+                  recordMetadata.offset());
+            });
   }
 }

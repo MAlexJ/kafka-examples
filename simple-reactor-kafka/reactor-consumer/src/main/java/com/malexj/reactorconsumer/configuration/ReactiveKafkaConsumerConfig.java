@@ -21,13 +21,14 @@ import reactor.kafka.receiver.ReceiverOptions;
 public class ReactiveKafkaConsumerConfig {
 
   private final KafkaConsumerConfigurationProperties properties;
+  private final String messageObjectDeserializerPath = Message.class.getName();
 
   @Bean
   public ReceiverOptions<String, Message> kafkaReceiver() {
 
     Map<String, Object> config = new HashMap<>();
     config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServerUrl());
-    config.put(ConsumerConfig.GROUP_ID_CONFIG, "reactive-kafka");
+    config.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
 
     /*
      * Configuration SASL_SSL connection: <a
@@ -39,7 +40,7 @@ public class ReactiveKafkaConsumerConfig {
 
     config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
     config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-    config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "com.reactive.kafka.model.ConsumerSample");
+    config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, messageObjectDeserializerPath);
     config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
     config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

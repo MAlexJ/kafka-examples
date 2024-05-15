@@ -12,6 +12,7 @@ consumer:
   kafka:
     bootstrapServerUrl: ${CLOUD_KAFKA_BROKER_URL}
     topic: ${CLOUD_KAFKA_USERNAME}-json-producer
+    groupId: ${CLOUD_KAFKA_USERNAME}-consumers
     securitySaslProtocol: SASL_SSL
     securitySaslMechanism: SCRAM-SHA-256
     securitySaslJaasConfig: org.apache.kafka.common.security.scram.ScramLoginModule required
