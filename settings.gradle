@@ -5,4 +5,7 @@ include 'simple-consumer-producer',
         'simple-consumer-producer:producer',
         'simple-error-handler',
         'simple-error-handler:consumer-error-handler',
-        'simple-error-handler:json-producer'
+        'simple-error-handler:json-producer',
+        'simple-reactor-kafka',
+        'simple-reactor-kafka:reactor-producer',
+        'simple-reactor-kafka:reactor-consumer'
