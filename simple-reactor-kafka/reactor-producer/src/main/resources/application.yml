@@ -1,3 +1,25 @@
+server:
+  port: ${APP_SERVICE_PORT:0}
+
 spring:
   application:
-    name: reactor-producer
+    name: ${APP_SERVICE_NAME:reactor-producer}
+
+  config:
+    import: optional:file:.env[.properties]
+
+kafka:
+  bootstrap:
+    servers:
+      url: ${CLOUD_KAFKA_BROKER_URL}
+  topic:
+    out: ${CLOUD_KAFKA_USERNAME}-json-producer
+  security:
+    sasl:
+      protocol: SASL_SSL
+      mechanism: SCRAM-SHA-256
+      jaas:
+        config: org.apache.kafka.common.security.scram.ScramLoginModule required
+          username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
+  default:
+    enabled: true
