@@ -9,7 +9,6 @@ import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.reactive.ReactiveKafkaProducerTemplate;
@@ -18,7 +17,6 @@ import reactor.kafka.sender.SenderOptions;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "kafka.default.enabled", matchIfMissing = true)
 public class ReactiveKafkaProducerConfig {
 
   private final KafkaConfigProperties kafkaConfigProperties;
@@ -27,7 +25,7 @@ public class ReactiveKafkaProducerConfig {
   public ReactiveKafkaProducerTemplate<String, Message> reactiveKafkaProducer() {
     Map<String, Object> props = new HashMap<>();
     props.put(
-        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigProperties.getBootstrapServersUrl());
+        ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigProperties.getBootstrapServerUrl());
     props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, false);
 
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -44,6 +42,6 @@ public class ReactiveKafkaProducerConfig {
     props.put(SaslConfigs.SASL_MECHANISM, kafkaConfigProperties.getSecuritySaslMechanism());
     props.put(SaslConfigs.SASL_JAAS_CONFIG, kafkaConfigProperties.getSecuritySaslJaasConfig());
 
-    return new ReactiveKafkaProducerTemplate<String, Message>(SenderOptions.create(props));
+    return new ReactiveKafkaProducerTemplate<>(SenderOptions.create(props));
   }
 }
