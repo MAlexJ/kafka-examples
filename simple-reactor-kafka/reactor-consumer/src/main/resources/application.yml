@@ -8,4 +8,11 @@ spring:
   config:
     import: optional:file:.env[.properties]
 
-
+consumer:
+  kafka:
+    bootstrapServerUrl: ${CLOUD_KAFKA_BROKER_URL}
+    topic: ${CLOUD_KAFKA_USERNAME}-json-producer
+    securitySaslProtocol: SASL_SSL
+    securitySaslMechanism: SCRAM-SHA-256
+    securitySaslJaasConfig: org.apache.kafka.common.security.scram.ScramLoginModule required
+      username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";

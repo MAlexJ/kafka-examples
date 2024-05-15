@@ -1,7 +1,7 @@
 package com.malexj.reactorconsumer.configuration;
 
 import com.malexj.reactorconsumer.model.Message;
-import com.malexj.reactorconsumer.properties.KafkaConsumerProperties;
+import com.malexj.reactorconsumer.properties.KafkaConsumerConfigurationProperties;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,25 +20,22 @@ import reactor.kafka.receiver.ReceiverOptions;
 @RequiredArgsConstructor
 public class ReactiveKafkaConsumerConfig {
 
-  private final KafkaConsumerProperties kafkaConsumerProperties;
+  private final KafkaConsumerConfigurationProperties properties;
 
   @Bean
   public ReceiverOptions<String, Message> kafkaReceiver() {
 
     Map<String, Object> config = new HashMap<>();
-    config.put(
-        ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConsumerProperties.getBootstrapServersUrl());
+    config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapServerUrl());
     config.put(ConsumerConfig.GROUP_ID_CONFIG, "reactive-kafka");
 
     /*
      * Configuration SASL_SSL connection: <a
      * href="https://stackoverflow.com/questions/60825373/spring-kafka-application-properties-configuration-for-jaas-sasl-not-working">JAAS/SASL</a>
      */
-    config.put(
-        CommonClientConfigs.SECURITY_PROTOCOL_CONFIG,
-        kafkaConsumerProperties.getSecuritySaslProtocol());
-    config.put(SaslConfigs.SASL_MECHANISM, kafkaConsumerProperties.getSecuritySaslMechanism());
-    config.put(SaslConfigs.SASL_JAAS_CONFIG, kafkaConsumerProperties.getSecuritySaslJaasConfig());
+    config.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, properties.getSecuritySaslProtocol());
+    config.put(SaslConfigs.SASL_MECHANISM, properties.getSecuritySaslMechanism());
+    config.put(SaslConfigs.SASL_JAAS_CONFIG, properties.getSecuritySaslJaasConfig());
 
     config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
     config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
@@ -48,13 +45,12 @@ public class ReactiveKafkaConsumerConfig {
     config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     ReceiverOptions<String, Message> basicReceiverOptions = ReceiverOptions.create(config);
-
-    return basicReceiverOptions.subscription(Collections.singletonList(topic));
+    return basicReceiverOptions.subscription(Collections.singletonList(properties.getTopic()));
   }
 
   @Bean
   public ReactiveKafkaConsumerTemplate<String, Message> reactiveKafkaConsumer(
       ReceiverOptions<String, Message> kafkaReceiverOptions) {
-    return new ReactiveKafkaConsumerTemplate<String, Message>(kafkaReceiverOptions);
+    return new ReactiveKafkaConsumerTemplate<>(kafkaReceiverOptions);
   }
 }
