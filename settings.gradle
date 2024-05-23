@@ -8,4 +8,7 @@ include 'simple-consumer-producer',
         'simple-error-handler:json-producer',
         'simple-reactor-kafka',
         'simple-reactor-kafka:reactor-producer',
-        'simple-reactor-kafka:reactor-consumer'
+        'simple-reactor-kafka:reactor-consumer',
+        'simple-batch-processing',
+        'simple-batch-processing:consumer',
+        'simple-batch-processing:producer'
