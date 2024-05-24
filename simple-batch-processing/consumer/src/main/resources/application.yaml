@@ -1,0 +1,25 @@
+server:
+  port: ${APP_SERVICE_PORT:0}
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  application:
+    name: ${APP_SERVICE_NAME:kafka-batch-consumer}
+
+kafka:
+  topic:
+    in: ${CLOUD_KAFKA_USERNAME}-json-producer
+  server:
+    bootstrapServer: ${CLOUD_KAFKA_BROKER_URL}
+    propertySecurityProtocol: SASL_SSL
+    propertySaslMechanism: SCRAM-SHA-256
+    propertySaslJaasConfig: org.apache.kafka.common.security.scram.ScramLoginModule required
+      username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
+  consumer:
+    autoOffsetReset: earliest
+    groupId: ${CLOUD_KAFKA_USERNAME}-consumers
+    keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+    valueDeserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    propertySpringJsonTrustedPackages: '*'
