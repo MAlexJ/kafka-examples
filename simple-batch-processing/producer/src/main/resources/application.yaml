@@ -6,25 +6,19 @@ spring:
     import: optional:file:.env[.properties]
 
   application:
-    name: ${APP_SERVICE_NAME:kafka-producer}
+    name: ${APP_SERVICE_NAME:kafka-batch-producer}
 
-  kafka:
-    bootstrap-servers: ${CLOUD_KAFKA_BROKER_URL}
-    properties:
-      security:
-        protocol: SASL_SSL
-      sasl:
-        mechanism: SCRAM-SHA-256
-        jaas:
-          config: org.apache.kafka.common.security.scram.ScramLoginModule required
-            username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
-
-    producer:
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      properties:
-        enable:
-          idempotence: false
-
-cloud:
-  kafka:
-    topic: ${CLOUD_KAFKA_USERNAME}-default
+kafka:
+  topic:
+    out: ${CLOUD_KAFKA_USERNAME}-json-producer
+  server:
+    bootstrapServer: ${CLOUD_KAFKA_BROKER_URL}
+    propertySecurityProtocol: SASL_SSL
+    propertySaslMechanism: SCRAM-SHA-256
+    propertySaslJaasConfig: org.apache.kafka.common.security.scram.ScramLoginModule required
+      username="${CLOUD_KAFKA_USERNAME}" password="${CLOUD_KAFKA_PASSWORD}";
+  producer:
+    keySerializer: org.apache.kafka.common.serialization.StringSerializer
+    valueSerializer: org.springframework.kafka.support.serializer.JsonSerializer
+    propertyEnableIdempotence: false
+    propertySpringJsonAddTypeHeaders: false
