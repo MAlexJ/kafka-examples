@@ -11,4 +11,6 @@ include 'simple-consumer-producer',
         'simple-reactor-kafka:reactor-consumer',
         'simple-batch-processing',
         'simple-batch-processing:consumer',
-        'simple-batch-processing:producer'
+        'simple-batch-processing:producer',
+        'test-kafka',
+        'test-kafka:spring-kafka-test'
