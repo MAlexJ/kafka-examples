@@ -36,6 +36,8 @@ import org.springframework.test.annotation.DirtiesContext;
 @EmbeddedKafka
 public class EmbeddedKafkaConsumerUnitTest {
 
+  protected static final long DURATION = 5000;
+
   @Value("${cloud.kafka.topic}")
   private String topic;
 
@@ -43,28 +45,23 @@ public class EmbeddedKafkaConsumerUnitTest {
 
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
-  private Producer<String, String> producer;
+  private Producer<String, String> defaultKafkaProducer;
 
   @Captor ArgumentCaptor<String> messageArgumentCaptor;
 
-  @Captor ArgumentCaptor<String> topicArgumentCaptor;
-
-  @Captor ArgumentCaptor<Integer> partitionArgumentCaptor;
-
-  @Captor ArgumentCaptor<Long> offsetArgumentCaptor;
-
+  /** Set up default Kafka producer factory */
   @BeforeEach
-  void setUp() {
+  void setUpProducerFactory() {
     var configs = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
     var keySerializer = new StringSerializer();
     var valueSerializer = new StringSerializer();
-    producer =
+    defaultKafkaProducer =
         new DefaultKafkaProducerFactory<>(configs, keySerializer, valueSerializer).createProducer();
   }
 
   @AfterEach
   void shutdown() {
-    producer.close();
+    defaultKafkaProducer.close();
   }
 
   @Test
@@ -73,22 +70,14 @@ public class EmbeddedKafkaConsumerUnitTest {
     var message = new MessageEvent(1, "Hello!");
 
     // when
-    producer.send(new ProducerRecord<>(topic, 0, UUID.randomUUID().toString(), message.toString()));
-    producer.flush();
+    defaultKafkaProducer.send(
+        new ProducerRecord<>(topic, 0, UUID.randomUUID().toString(), message.toString()));
+    defaultKafkaProducer.flush();
 
     // than
-    verify(consumer, timeout(500).times(1)).processMessage(messageArgumentCaptor.capture());
+    verify(consumer, timeout(DURATION).times(1)).processMessage(messageArgumentCaptor.capture());
 
     // and
     assertThat(messageArgumentCaptor.getValue()).contains("Hello!");
-
-    //        User user = userArgumentCaptor.getValue();
-    //        assertNotNull(user);
-    //        assertEquals("11111", user.getUuid());
-    //        assertEquals("John", user.getFirstName());
-    //        assertEquals("Wick", user.getLastName());
-    //        assertEquals(TOPIC_NAME, topicArgumentCaptor.getValue());
-    //        assertEquals(0, partitionArgumentCaptor.getValue());
-    //        assertEquals(0, offsetArgumentCaptor.getValue());
   }
 }

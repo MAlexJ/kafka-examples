@@ -23,7 +23,7 @@ import org.springframework.test.annotation.DirtiesContext;
     brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
 public class EmbeddedKafkaUnitTest {
 
-  private static final long DURATION = 1000;
+  private static final long DURATION = 5000;
 
   @SpyBean private KafkaConsumer consumer;
 

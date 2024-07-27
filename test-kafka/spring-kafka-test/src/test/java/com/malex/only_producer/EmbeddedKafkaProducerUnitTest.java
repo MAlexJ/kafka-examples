@@ -39,7 +39,7 @@ public class EmbeddedKafkaProducerUnitTest {
 
   private BlockingQueue<ConsumerRecord<String, String>> records;
 
-  private KafkaMessageListenerContainer<String, String> container;
+  private KafkaMessageListenerContainer<String, String> defaultKafkaConsumer;
 
   @Autowired private KafkaProducer producer;
 
@@ -48,15 +48,16 @@ public class EmbeddedKafkaProducerUnitTest {
   @Value("${cloud.kafka.topic}")
   private String topic;
 
+  /** Set up default Kafka consumer factory */
   @BeforeEach
-  void setUp() {
+  void setUpConsumerFactory() {
     var consumerFactory = new DefaultKafkaConsumerFactory<String, String>(getConsumerProperties());
     var containerProperties = new ContainerProperties(topic);
-    container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
+    defaultKafkaConsumer = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
     records = new LinkedBlockingQueue<>();
-    container.setupMessageListener((MessageListener<String, String>) records::add);
-    container.start();
-    ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
+    defaultKafkaConsumer.setupMessageListener((MessageListener<String, String>) records::add);
+    defaultKafkaConsumer.start();
+    ContainerTestUtils.waitForAssignment(defaultKafkaConsumer, embeddedKafkaBroker.getPartitionsPerTopic());
   }
 
   private Map<String, Object> getConsumerProperties() {
@@ -73,7 +74,7 @@ public class EmbeddedKafkaProducerUnitTest {
 
   @AfterEach
   void tearDown() {
-    container.stop();
+    defaultKafkaConsumer.stop();
   }
 
   /**

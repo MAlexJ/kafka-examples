@@ -9,3 +9,5 @@ test:
 cloud:
   kafka:
     topic: embedded-test-topic
+    topic_input: embedded-test-input
+    topic_output: embedded-test-output

@@ -36,3 +36,5 @@ spring:
 cloud:
   kafka:
     topic: ${CLOUD_KAFKA_USERNAME}-default
+    topic_input: ${CLOUD_KAFKA_USERNAME}-input
+    topic_output: ${CLOUD_KAFKA_USERNAME}-output

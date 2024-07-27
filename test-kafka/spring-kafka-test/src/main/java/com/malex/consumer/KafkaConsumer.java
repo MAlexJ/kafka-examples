@@ -1,13 +1,8 @@
 package com.malex.consumer;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -15,26 +10,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaConsumer {
 
-  @Getter
-  protected AtomicInteger counter = new AtomicInteger(0);
-
   @KafkaListener(topics = "${cloud.kafka.topic}")
-  public void processMessage(
-      String message) {
-    errorHandler(
-        message,
-        () ->
-            log.info(
-                "Consumer - topic:{}",
-//                topics,
-//                partitions,
-//                offsets,
-                message));
+  public void processMessage(String message) {
+    errorHandler(message, () -> log.info("Consumer - topic:{}", message));
   }
 
   private void errorHandler(String message, Runnable r) {
     try {
-      counter.incrementAndGet();
       r.run();
     } catch (Exception ex) {
       String errorMessage =
