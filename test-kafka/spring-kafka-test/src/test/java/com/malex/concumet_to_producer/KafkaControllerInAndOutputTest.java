@@ -16,15 +16,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 /** info https://www.geekyhacker.com/test-spring-kafka-consumer-and-producer-with-embeddedkafka/ */
 @SpringBootTest
 @DirtiesContext
 class KafkaControllerInAndOutputTest extends AbstractEmbeddedKafkaProducer {
 
-  @SpyBean private KafkaConsumerInput consumerInput;
+  @MockitoSpyBean private KafkaConsumerInput consumerInput;
 
   @Captor ArgumentCaptor<String> messageArgumentCaptor;
 
@@ -36,7 +36,7 @@ class KafkaControllerInAndOutputTest extends AbstractEmbeddedKafkaProducer {
   }
 
   @Test
-  public void messagePassConditionTest() throws InterruptedException {
+  void messagePassConditionTest() throws InterruptedException {
     // 1. Sent message to 'input' topic
     var key = UUID.randomUUID().toString();
     var value = "test message";
@@ -55,7 +55,7 @@ class KafkaControllerInAndOutputTest extends AbstractEmbeddedKafkaProducer {
   }
 
   @Test
-  public void messageDidntPassConditionTest() throws InterruptedException {
+  void messageDidntPassConditionTest() throws InterruptedException {
     // 1. sent message to input topic
     var key = UUID.randomUUID().toString();
     var value = "xxx message";

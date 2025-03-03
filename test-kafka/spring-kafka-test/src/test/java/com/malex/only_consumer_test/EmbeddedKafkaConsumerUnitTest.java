@@ -19,12 +19,12 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 /**
  * Test Spring Kafka consumer and producer with EmbeddedKafka
@@ -34,14 +34,14 @@ import org.springframework.test.annotation.DirtiesContext;
 @SpringBootTest
 @DirtiesContext
 @EmbeddedKafka
-public class EmbeddedKafkaConsumerUnitTest {
+class EmbeddedKafkaConsumerUnitTest {
 
   protected static final long DURATION = 5000;
 
   @Value("${cloud.kafka.topic}")
   private String topic;
 
-  @SpyBean private KafkaConsumer consumer;
+  @MockitoSpyBean private KafkaConsumer consumer;
 
   @Autowired private EmbeddedKafkaBroker embeddedKafkaBroker;
 
@@ -65,7 +65,7 @@ public class EmbeddedKafkaConsumerUnitTest {
   }
 
   @Test
-  public void testLogKafkaMessages() {
+  void testLogKafkaMessages() {
     // given
     var message = new MessageEvent(1, "Hello!");
 

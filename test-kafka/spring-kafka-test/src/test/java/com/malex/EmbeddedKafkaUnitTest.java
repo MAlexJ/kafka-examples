@@ -12,27 +12,27 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 @SpringBootTest
 @DirtiesContext
 @EmbeddedKafka(
     partitions = 1,
     brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
-public class EmbeddedKafkaUnitTest {
+class EmbeddedKafkaUnitTest {
 
   private static final long DURATION = 5000;
 
-  @SpyBean private KafkaConsumer consumer;
+  @MockitoSpyBean private KafkaConsumer consumer;
 
   @Autowired private KafkaProducer producer;
 
   @Captor private ArgumentCaptor<String> myMessageCaptor;
 
   @Test
-  public void embeddedKafkaBrokerSendTest() {
+  void embeddedKafkaBrokerSendTest() {
     // given
     String data = "Sending with our own simple KafkaProducer";
 
