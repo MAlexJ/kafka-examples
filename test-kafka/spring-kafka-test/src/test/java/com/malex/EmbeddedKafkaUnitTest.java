@@ -20,7 +20,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 @DirtiesContext
 @EmbeddedKafka(
     partitions = 1,
-    brokerProperties = {"listeners=PLAINTEXT://localhost:9092", "port=9092"})
+    brokerProperties = {"listeners=PLAINTEXT://localhost:9992", "port=9992"})
 class EmbeddedKafkaUnitTest {
 
   private static final long DURATION = 5000;

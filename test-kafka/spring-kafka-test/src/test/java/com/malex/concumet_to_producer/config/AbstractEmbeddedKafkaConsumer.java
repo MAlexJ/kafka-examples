@@ -13,10 +13,8 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 import org.springframework.kafka.listener.MessageListener;
-import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.ContainerTestUtils;
 
-@EmbeddedKafka
 public abstract class AbstractEmbeddedKafkaConsumer extends AbstractEmbeddedKafkaBroker {
 
   private final String[] topics;

@@ -33,7 +33,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
  */
 @SpringBootTest
 @DirtiesContext
-@EmbeddedKafka
+@EmbeddedKafka(brokerProperties = {"listeners=PLAINTEXT://localhost:9992", "port=9992"})
 class EmbeddedKafkaConsumerUnitTest {
 
   protected static final long DURATION = 5000;

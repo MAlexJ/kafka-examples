@@ -13,4 +13,6 @@ include 'simple-consumer-producer',
         'simple-batch-processing:consumer',
         'simple-batch-processing:producer',
         'test-kafka',
-        'test-kafka:spring-kafka-test'
+        'test-kafka:spring-kafka-test',
+        'consumer-group-id',
+        'auto-offset-reset'

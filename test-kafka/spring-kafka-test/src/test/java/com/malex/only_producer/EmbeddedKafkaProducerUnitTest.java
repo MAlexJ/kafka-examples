@@ -34,7 +34,7 @@ import org.springframework.test.annotation.DirtiesContext;
  */
 @SpringBootTest
 @DirtiesContext
-@EmbeddedKafka
+@EmbeddedKafka(brokerProperties = {"listeners=PLAINTEXT://localhost:9992", "port=9992"})
 public class EmbeddedKafkaProducerUnitTest {
 
   private BlockingQueue<ConsumerRecord<String, String>> records;

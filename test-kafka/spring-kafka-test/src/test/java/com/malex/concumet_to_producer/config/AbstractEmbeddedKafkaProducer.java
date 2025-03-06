@@ -9,7 +9,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
-@EmbeddedKafka
+@EmbeddedKafka(brokerProperties = {"listeners=PLAINTEXT://localhost:9992", "port=9992"})
 public abstract class AbstractEmbeddedKafkaProducer extends AbstractEmbeddedKafkaConsumer {
 
   protected static final long DURATION = 5000;
